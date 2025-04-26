@@ -111,6 +111,14 @@ func main() {
 	// for {
 	// 	fmt.Println("hello")
 	// }
+	// i := 1
+	// for{
+	// 	if i <= 10{
+	// 		fmt.Println(i)
+	// 	}else{
+	// 		break
+	// 	}
+	// }
 	// 循环嵌套
 	for i := 1; i <= 9; i++ {
 		for j := 1; j <= i; j++ {
@@ -118,4 +126,15 @@ func main() {
 		}
 		fmt.Println()
 	}
+	// break
+	// break可以用于跳出循环
+	// break可以用于跳出switch
+	// break可以用于跳出select
+	// break可以用于跳出函数
+	// break可以用于跳出代码块
+	// break可以用于跳出if
+	// break可以用于跳出for
+	// break可以用于跳出for range
+	// break可以用于跳出select
+	// break可以用于跳出switch
 }

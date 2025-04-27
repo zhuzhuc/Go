@@ -10,6 +10,7 @@ func test() bool {
 	return true
 }
 
+// /
 func main() {
 	aa := 6
 	bb := 3

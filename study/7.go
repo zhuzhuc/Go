@@ -5,6 +5,8 @@ import (
 	"strconv"
 )
 
+// 类型转换
+// 类型转换的格式为：类型(表达式)
 func main() {
 	// 数值类型之间的转换
 	var a int8 = 20

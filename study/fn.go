@@ -39,6 +39,23 @@ func calc2(x, y int) (sum int, sub int) {
 	return sum, sub
 }
 
+func fn1(n int) {
+	if n > 0 {
+		fmt.Printf("n = %d\n", n)
+		n--
+		fn1(n)
+	}
+}
+
+func fn2(n int) int {
+	// fn1()
+	if n > 1 {
+		return n + fn2(n-1)
+	} else {
+		return 1
+	}
+}
+
 func main() {
 	var a, b int
 	fmt.Println("请输入两个数字：")
@@ -61,4 +78,8 @@ func main() {
 	fmt.Println("sub6 =", sub6)
 	sub7, _ := calc2(a, b)
 	fmt.Println("sub7 =", sub7)
+
+	fn1(10)
+	// 函数递归调用
+	fmt.Println(fn2(100))
 }

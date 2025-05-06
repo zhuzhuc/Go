@@ -131,3 +131,5 @@ func main() {
 	fmt.Println(adder2(10))
 	fmt.Println(adder2(10))
 }
+
+// 闭包让一个变量常驻内存，并且不污染全局变量

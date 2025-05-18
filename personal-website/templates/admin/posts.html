@@ -1,0 +1,132 @@
+{{ define "content" }}
+<section class="admin-posts">
+    <div class="admin-header">
+        <h1>Manage Posts</h1>
+        <a href="/admin/posts/new" class="btn primary-btn">Create New Post</a>
+    </div>
+    
+    <div class="admin-filters">
+        <form action="/admin/posts" method="GET">
+            <div class="filter-group">
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="">All</option>
+                    <option value="published" {{ if eq .status "published" }}selected{{ end }}>Published</option>
+                    <option value="draft" {{ if eq .status "draft" }}selected{{ end }}>Draft</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search" value="{{ .search }}">
+            </div>
+            
+            <button type="submit" class="btn secondary-btn">Filter</button>
+        </form>
+    </div>
+    
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Views</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{ range .posts }}
+            <tr>
+                <td>{{ .Title }}</td>
+                <td>{{ .Author.Username }}</td>
+                <td>{{ if .Published }}Published{{ else }}Draft{{ end }}</td>
+                <td>{{ .CreatedAt.Format "Jan 02, 2006" }}</td>
+                <td>{{ .ViewCount }}</td>
+                <td>
+                    <a href="/admin/posts/edit/{{ .ID }}" class="action-link">Edit</a>
+                    <a href="/blog/{{ .ID }}" class="action-link">View</a>
+                    <a href="#" class="action-link delete-post" data-id="{{ .ID }}">Delete</a>
+                </td>
+            </tr>
+            {{ end }}
+        </tbody>
+    </table>
+    
+    {{ if .pagination }}
+        <div class="pagination">
+            {{ if gt .pagination.Page 1 }}
+                <a href="/admin/posts?page={{ sub .pagination.Page 1 }}" class="pagination-item">&laquo; Previous</a>
+            {{ end }}
+            
+            {{ range $i := seq 1 .pagination.TotalPages }}
+                {{ if eq $i $.pagination.Page }}
+                    <span class="pagination-item active">{{ $i }}</span>
+                {{ else }}
+                    <a href="/admin/posts?page={{ $i }}" class="pagination-item">{{ $i }}</a>
+                {{ end }}
+            {{ end }}
+            
+            {{ if lt .pagination.Page .pagination.TotalPages }}
+                <a href="/admin/posts?page={{ add .pagination.Page 1 }}" class="pagination-item">Next &raquo;</a>
+            {{ end }}
+        </div>
+    {{ end }}
+</section>
+
+<div id="delete-modal" class="modal">
+    <div class="modal-content">
+        <h2>Confirm Deletion</h2>
+        <p>Are you sure you want to delete this post? This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button id="confirm-delete" class="btn primary-btn">Delete</button>
+            <button id="cancel-delete" class="btn secondary-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Delete post functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const deleteLinks = document.querySelectorAll('.delete-post');
+        const deleteModal = document.getElementById('delete-modal');
+        const confirmDelete = document.getElementById('confirm-delete');
+        const cancelDelete = document.getElementById('cancel-delete');
+        let postIdToDelete;
+        
+        deleteLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                postIdToDelete = this.getAttribute('data-id');
+                deleteModal.style.display = 'flex';
+            });
+        });
+        
+        cancelDelete.addEventListener('click', function() {
+            deleteModal.style.display = 'none';
+        });
+        
+        confirmDelete.addEventListener('click', function() {
+            // Send delete request
+            fetch(`/api/posts/${postIdToDelete}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    alert('Failed to delete post');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the post');
+            });
+        });
+    });
+</script>
+{{ end }}

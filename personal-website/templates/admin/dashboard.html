@@ -1,0 +1,60 @@
+{{ define "content" }}
+<section class="admin-dashboard">
+    <h1>Admin Dashboard</h1>
+    
+    <div class="dashboard-stats">
+        <div class="stat-card">
+            <h3>Posts</h3>
+            <p class="stat-number">{{ .postCount }}</p>
+            <a href="/admin/posts" class="stat-link">Manage Posts</a>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Users</h3>
+            <p class="stat-number">{{ .userCount }}</p>
+            <a href="/admin/users" class="stat-link">Manage Users</a>
+        </div>
+        
+        <div class="stat-card">
+            <h3>Comments</h3>
+            <p class="stat-number">{{ .commentCount }}</p>
+            <a href="/admin/comments" class="stat-link">Manage Comments</a>
+        </div>
+    </div>
+    
+    <div class="dashboard-actions">
+        <a href="/admin/posts/new" class="btn primary-btn">Create New Post</a>
+        <a href="/admin/users/new" class="btn secondary-btn">Add New User</a>
+    </div>
+    
+    <div class="recent-posts">
+        <h2>Recent Posts</h2>
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range .recentPosts }}
+                <tr>
+                    <td>{{ .Title }}</td>
+                    <td>{{ .Author.Username }}</td>
+                    <td>{{ if .Published }}Published{{ else }}Draft{{ end }}</td>
+                    <td>{{ .CreatedAt.Format "Jan 02, 2006" }}</td>
+                    <td>
+                        <a href="/admin/posts/edit/{{ .ID }}" class="action-link">Edit</a>
+                        <a href="/blog/{{ .ID }}" class="action-link">View</a>
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+        <a href="/admin/posts" class="view-all">View All Posts</a>
+    </div>
+</section>
+{{ end }}

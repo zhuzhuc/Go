@@ -1,0 +1,59 @@
+{{ define "content" }}
+<section class="page-header">
+    <h1>Blog</h1>
+    <p>Thoughts, ideas, and experiences shared through writing.</p>
+</section>
+
+<section class="blog-content">
+    <div class="post-grid">
+        {{ if .posts }}
+            {{ range .posts }}
+                <div class="post-card">
+                    {{ if .FeaturedImg }}
+                        <div class="post-image">
+                            <img src="{{ .FeaturedImg }}" alt="{{ .Title }}">
+                        </div>
+                    {{ end }}
+                    <div class="post-content">
+                        <h2><a href="/blog/{{ .ID }}">{{ .Title }}</a></h2>
+                        <div class="post-meta">
+                            <span>{{ .CreatedAt.Format "Jan 02, 2006" }}</span>
+                            <span>By {{ .Author.Username }}</span>
+                            <span>{{ .ViewCount }} views</span>
+                        </div>
+                        <p>{{ .Excerpt }}</p>
+                        <div class="post-tags">
+                            {{ range .Tags }}
+                                <span class="tag">{{ .Name }}</span>
+                            {{ end }}
+                        </div>
+                        <a href="/blog/{{ .ID }}" class="read-more">Read More</a>
+                    </div>
+                </div>
+            {{ end }}
+        {{ else }}
+            <p class="no-posts">No posts yet. Check back soon!</p>
+        {{ end }}
+    </div>
+
+    {{ if .pagination }}
+        <div class="pagination">
+            {{ if gt .pagination.Page 1 }}
+                <a href="/blog?page={{ sub .pagination.Page 1 }}" class="pagination-item">&laquo; Previous</a>
+            {{ end }}
+            
+            {{ range $i := seq 1 .pagination.TotalPages }}
+                {{ if eq $i $.pagination.Page }}
+                    <span class="pagination-item active">{{ $i }}</span>
+                {{ else }}
+                    <a href="/blog?page={{ $i }}" class="pagination-item">{{ $i }}</a>
+                {{ end }}
+            {{ end }}
+            
+            {{ if lt .pagination.Page .pagination.TotalPages }}
+                <a href="/blog?page={{ add .pagination.Page 1 }}" class="pagination-item">Next &raquo;</a>
+            {{ end }}
+        </div>
+    {{ end }}
+</section>
+{{ end }}

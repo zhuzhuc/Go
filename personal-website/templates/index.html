@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ .title }} | Personal Website</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="/static/js/main.js" defer></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">My Website</a>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/about">About</a>
+                <a href="/projects">Projects</a>
+                <a href="/blog">Blog</a>
+                <a href="/contact">Contact</a>
+            </div>
+            <div class="auth-links">
+                {{ if .isLoggedIn }}
+                    <span>Welcome, {{ .user.Username }}</span>
+                    {{ if eq .user.Role "admin" }}
+                        <a href="/admin">Admin</a>
+                    {{ end }}
+                    <a href="/logout">Logout</a>
+                {{ else }}
+                    <a href="/login">Login</a>
+                    <a href="/register">Register</a>
+                {{ end }}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to My Personal Website</h1>
+                <p>A showcase of my projects, thoughts, and experiences.</p>
+                <div class="hero-buttons">
+                    <a href="/projects" class="btn primary-btn">View Projects</a>
+                    <a href="/blog" class="btn secondary-btn">Read Blog</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-posts">
+            <h2>Latest Blog Posts</h2>
+            <div class="post-grid">
+                {{ if .posts }}
+                    {{ range .posts }}
+                        <div class="post-card">
+                            {{ if .FeaturedImg }}
+                                <div class="post-image">
+                                    <img src="{{ .FeaturedImg }}" alt="{{ .Title }}">
+                                </div>
+                            {{ end }}
+                            <div class="post-content">
+                                <h3><a href="/blog/{{ .ID }}">{{ .Title }}</a></h3>
+                                <div class="post-meta">
+                                    <span>{{ .CreatedAt.Format "Jan 02, 2006" }}</span>
+                                    <span>{{ .Author.Username }}</span>
+                                </div>
+                                <p>{{ .Excerpt }}</p>
+                                <a href="/blog/{{ .ID }}" class="read-more">Read More</a>
+                            </div>
+                        </div>
+                    {{ end }}
+                {{ else }}
+                    <p>No posts yet. Check back soon!</p>
+                {{ end }}
+            </div>
+            <div class="view-all">
+                <a href="/blog" class="btn secondary-btn">View All Posts</a>
+            </div>
+        </section>
+
+        <section class="about-preview">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="/static/img/profile.jpg" alt="Profile Picture">
+                </div>
+                <div class="about-text">
+                    <p>Hello! I'm a passionate developer with expertise in Go, web development, and more. I love building things that live on the internet and solving complex problems.</p>
+                    <p>This website is built with Go and the Gin framework, showcasing my projects and thoughts through my blog.</p>
+                    <a href="/about" class="btn primary-btn">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="skills">
+            <h2>Skills & Technologies</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <h3>Backend Development</h3>
+                    <ul>
+                        <li>Go</li>
+                        <li>Node.js</li>
+                        <li>Python</li>
+                        <li>RESTful APIs</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Frontend Development</h3>
+                    <ul>
+                        <li>HTML/CSS</li>
+                        <li>JavaScript</li>
+                        <li>React</li>
+                        <li>Vue.js</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>Database</h3>
+                    <ul>
+                        <li>PostgreSQL</li>
+                        <li>MySQL</li>
+                        <li>MongoDB</li>
+                        <li>Redis</li>
+                    </ul>
+                </div>
+                <div class="skill-card">
+                    <h3>DevOps</h3>
+                    <ul>
+                        <li>Docker</li>
+                        <li>Kubernetes</li>
+                        <li>CI/CD</li>
+                        <li>AWS/GCP</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact-preview">
+            <h2>Get In Touch</h2>
+            <p>Have a question or want to work together? Feel free to reach out!</p>
+            <a href="/contact" class="btn primary-btn">Contact Me</a>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About</h3>
+                <p>A personal website built with Go and Gin framework.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links</h3>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/projects">Projects</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Connect</h3>
+                <div class="social-links">
+                    <a href="#" target="_blank">GitHub</a>
+                    <a href="#" target="_blank">LinkedIn</a>
+                    <a href="#" target="_blank">Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; {{ .currentYear }} My Personal Website. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

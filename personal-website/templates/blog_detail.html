@@ -1,0 +1,113 @@
+{{ define "content" }}
+<article class="blog-post">
+    <header class="post-header">
+        <h1>{{ .post.Title }}</h1>
+        <div class="post-meta">
+            <span class="post-date">{{ .post.CreatedAt.Format "Jan 02, 2006" }}</span>
+            <span class="post-author">By {{ .post.Author.Username }}</span>
+            <span class="post-views">{{ .post.ViewCount }} views</span>
+        </div>
+        <div class="post-tags">
+            {{ range .post.Tags }}
+                <span class="tag">{{ .Name }}</span>
+            {{ end }}
+        </div>
+    </header>
+
+    {{ if .post.FeaturedImg }}
+        <div class="post-featured-image">
+            <img src="{{ .post.FeaturedImg }}" alt="{{ .post.Title }}">
+        </div>
+    {{ end }}
+
+    <div class="post-content">
+        {{ .post.Content | safeHTML }}
+    </div>
+
+    <div class="post-footer">
+        <div class="post-share">
+            <span>Share:</span>
+            <a href="https://twitter.com/intent/tweet?url={{ .currentURL }}&text={{ .post.Title }}" target="_blank" rel="noopener noreferrer">Twitter</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ .currentURL }}" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ .currentURL }}&title={{ .post.Title }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </div>
+
+        <div class="post-author-bio">
+            <h3>About the Author</h3>
+            <div class="author-info">
+                {{ if .post.Author.Avatar }}
+                    <img src="{{ .post.Author.Avatar }}" alt="{{ .post.Author.Username }}">
+                {{ else }}
+                    <img src="/static/img/default-avatar.png" alt="{{ .post.Author.Username }}">
+                {{ end }}
+                <div>
+                    <h4>{{ .post.Author.FirstName }} {{ .post.Author.LastName }}</h4>
+                    <p>{{ .post.Author.Bio }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<section class="related-posts">
+    <h2>Related Posts</h2>
+    <div class="post-grid">
+        {{ if .relatedPosts }}
+            {{ range .relatedPosts }}
+                <div class="post-card">
+                    {{ if .FeaturedImg }}
+                        <div class="post-image">
+                            <img src="{{ .FeaturedImg }}" alt="{{ .Title }}">
+                        </div>
+                    {{ end }}
+                    <div class="post-content">
+                        <h3><a href="/blog/{{ .ID }}">{{ .Title }}</a></h3>
+                        <div class="post-meta">
+                            <span>{{ .CreatedAt.Format "Jan 02, 2006" }}</span>
+                        </div>
+                        <p>{{ .Excerpt }}</p>
+                        <a href="/blog/{{ .ID }}" class="read-more">Read More</a>
+                    </div>
+                </div>
+            {{ end }}
+        {{ else }}
+            <p>No related posts found.</p>
+        {{ end }}
+    </div>
+</section>
+
+<section class="comments">
+    <h2>Comments</h2>
+    {{ if .isLoggedIn }}
+        <form class="comment-form" action="/api/posts/{{ .post.ID }}/comments" method="POST">
+            <div class="form-group">
+                <label for="comment">Leave a comment:</label>
+                <textarea id="comment" name="content" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn primary-btn">Submit Comment</button>
+        </form>
+    {{ else }}
+        <p>Please <a href="/login">login</a> to leave a comment.</p>
+    {{ end }}
+
+    <div class="comment-list">
+        {{ if .post.Comments }}
+            {{ range .post.Comments }}
+                {{ if .Approved }}
+                    <div class="comment">
+                        <div class="comment-header">
+                            <span class="comment-author">{{ .User.Username }}</span>
+                            <span class="comment-date">{{ .CreatedAt.Format "Jan 02, 2006 at 15:04" }}</span>
+                        </div>
+                        <div class="comment-content">
+                            <p>{{ .Content }}</p>
+                        </div>
+                    </div>
+                {{ end }}
+            {{ end }}
+        {{ else }}
+            <p>No comments yet. Be the first to comment!</p>
+        {{ end }}
+    </div>
+</section>
+{{ end }}

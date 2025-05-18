@@ -1,0 +1,186 @@
+{{ define "content" }}
+<section class="admin-post-form">
+    <div class="admin-header">
+        {{ if .post }}
+            <h1>Edit Post</h1>
+        {{ else }}
+            <h1>Create New Post</h1>
+        {{ end }}
+    </div>
+    
+    <form id="post-form" class="post-form">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" value="{{ if .post }}{{ .post.Title }}{{ end }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="excerpt">Excerpt</label>
+            <textarea id="excerpt" name="excerpt" rows="3">{{ if .post }}{{ .post.Excerpt }}{{ end }}</textarea>
+            <small>A brief summary of the post (optional)</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="content">Content</label>
+            <div id="markdown-editor"></div>
+            <textarea id="content" name="content" style="display: none;">{{ if .post }}{{ .post.Content }}{{ end }}</textarea>
+            <small>Supports Markdown formatting</small>
+        </div>
+        
+        <div class="form-group">
+            <label for="featured_img">Featured Image URL</label>
+            <input type="text" id="featured_img" name="featured_img" value="{{ if .post }}{{ .post.FeaturedImg }}{{ end }}">
+            <small>URL to an image for the post (optional)</small>
+        </div>
+        
+        <div class="form-group">
+            <label>Tags</label>
+            <div class="tags-container">
+                {{ range .tags }}
+                    <div class="tag-checkbox">
+                        <input type="checkbox" id="tag-{{ .ID }}" name="tags" value="{{ .ID }}" 
+                            {{ if $.post }}
+                                {{ range $.post.Tags }}
+                                    {{ if eq .ID $.ID }}checked{{ end }}
+                                {{ end }}
+                            {{ end }}
+                        >
+                        <label for="tag-{{ .ID }}">{{ .Name }}</label>
+                    </div>
+                {{ end }}
+            </div>
+            <div class="new-tag-input">
+                <input type="text" id="new-tag" placeholder="Add a new tag">
+                <button type="button" id="add-tag-btn" class="btn secondary-btn">Add</button>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="published">Status</label>
+            <div class="status-toggle">
+                <input type="checkbox" id="published" name="published" {{ if and .post .post.Published }}checked{{ end }}>
+                <label for="published">Published</label>
+            </div>
+            <small>If checked, the post will be visible to the public</small>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn primary-btn">
+                {{ if .post }}Update Post{{ else }}Create Post{{ end }}
+            </button>
+            <a href="/admin/posts" class="btn secondary-btn">Cancel</a>
+        </div>
+    </form>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Markdown editor
+        const easyMDE = new EasyMDE({
+            element: document.getElementById('content'),
+            spellChecker: false,
+            autosave: {
+                enabled: true,
+                delay: 1000,
+                uniqueId: 'post-content-{{ if .post }}{{ .post.ID }}{{ else }}new{{ end }}'
+            }
+        });
+        
+        // Handle form submission
+        document.getElementById('post-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const title = document.getElementById('title').value;
+            const excerpt = document.getElementById('excerpt').value;
+            const content = easyMDE.value();
+            const featuredImg = document.getElementById('featured_img').value;
+            const published = document.getElementById('published').checked;
+            
+            // Get selected tags
+            const selectedTags = [];
+            document.querySelectorAll('input[name="tags"]:checked').forEach(tag => {
+                selectedTags.push(parseInt(tag.value));
+            });
+            
+            // Create post object
+            const postData = {
+                title: title,
+                excerpt: excerpt,
+                content: content,
+                featured_img: featuredImg,
+                published: published,
+                tag_ids: selectedTags
+            };
+            
+            // Determine if this is a create or update operation
+            const isUpdate = {{ if .post }}true{{ else }}false{{ end }};
+            const url = isUpdate ? '/api/posts/{{ .post.ID }}' : '/api/posts';
+            const method = isUpdate ? 'PUT' : 'POST';
+            
+            // Send request
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to save post');
+            })
+            .then(data => {
+                window.location.href = '/admin/posts';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while saving the post');
+            });
+        });
+        
+        // Handle adding new tags
+        document.getElementById('add-tag-btn').addEventListener('click', function() {
+            const newTagInput = document.getElementById('new-tag');
+            const tagName = newTagInput.value.trim();
+            
+            if (tagName) {
+                fetch('/api/tags', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: tagName })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Failed to create tag');
+                })
+                .then(data => {
+                    // Add new tag to the list
+                    const tagsContainer = document.querySelector('.tags-container');
+                    const newTag = document.createElement('div');
+                    newTag.className = 'tag-checkbox';
+                    newTag.innerHTML = `
+                        <input type="checkbox" id="tag-${data.id}" name="tags" value="${data.id}" checked>
+                        <label for="tag-${data.id}">${data.name}</label>
+                    `;
+                    tagsContainer.appendChild(newTag);
+                    newTagInput.value = '';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while creating the tag');
+                });
+            }
+        });
+    });
+</script>
+{{ end }}

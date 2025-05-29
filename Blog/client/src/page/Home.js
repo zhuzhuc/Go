@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import axios from "axios";
 import { Link, useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { useAuth } from '../context/AuthContext';
+import BlogCard from '../components/BlogCard';
 
 const Home = () => {
   const [apiData, setApiData] = useState([]);
@@ -115,99 +114,39 @@ const Home = () => {
       <Row className="row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {apiData.length > 0 ? (
           apiData.map((record) => (
-            <Col key={record.id}>
-              <div className="box h-100">
-                <div className="blog-card-content">
-                  <div className="title">
-                    <Link to={`blog/${record.id}`}>{record.Title}</Link>
-                  </div>
-                  <div className="author text-muted mb-2">
-                    <small><i className="fas fa-user me-1"></i> {record.Author || "Anonymous"}</small>
-                  </div>
-                  <div className="flex-grow-1 blog-card-excerpt">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkGfm]}
-                      components={{
-                        // 不显示图片
-                        img: () => null,
-                        // 简化链接
-                        a: ({children}) => <span>{children}</span>,
-                        // 简化段落
-                        p: ({children}) => {
-                          // 将内容转换为纯文本
-                          const textContent = React.Children.toArray(children)
-                            .map(child => typeof child === 'string' ? child : '')
-                            .join('');
-
-                          // 截断文本
-                          const truncatedText = textContent.length > 150
-                            ? `${textContent.substring(0, 150)}...`
-                            : textContent;
-
-                          return <p>{truncatedText}</p>;
+            <Col key={record.id} className="mb-4">
+              <BlogCard
+                blog={record}
+                onEdit={(id) => navigate(`/edit/${id}`)}
+                onDelete={async (id) => {
+                  if(window.confirm('确定要删除这篇博客吗？')) {
+                    try {
+                      const apiUrl = `${process.env.REACT_APP_API_ROOT}/${id}`;
+                      const response = await axios.delete(apiUrl, {
+                        headers: {
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`
                         }
-                      }}
-                    >
-                      {record.Post}
-                    </ReactMarkdown>
-                  </div>
-                  <div className="mt-auto pt-3 d-flex justify-content-between align-items-center">
-                    <div>
-                      <Link to={`edit/${record.id}`} className="btn btn-sm btn-outline-secondary me-2">
-                        <i className="fas fa-edit"></i>
-                      </Link>
-                      <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          if(window.confirm('Are you sure you want to delete this blog post?')) {
-                            try {
-                              const apiUrl = process.env.REACT_APP_API_ROOT + "/" + record.id;
-                              const response = await axios.delete(apiUrl);
-                              if(response.status === 200) {
-                                alert('Blog post deleted successfully!');
-                                // 刷新博客列表
-                                window.location.reload();
-                              }
-                            } catch (error) {
-                              console.error('Error deleting blog post:', error);
-                              alert('Failed to delete blog post. Please try again.');
-                            }
-                          }
-                        }}
-                      >
-                        <i className="fas fa-trash-alt"></i>
-                      </button>
-                    </div>
-                    <Link
-                      to={`blog/${record.id}`}
-                      className="btn btn-sm btn-outline-primary"
-                      onClick={(e) => handleReadMoreClick(e, record.id)}
-                    >
-                      Read More <i className="fas fa-arrow-right ms-1"></i>
-                    </Link>
-                  </div>
-                </div>
-                {record.Image && (
-                  <div className="blog-card-image">
-                    <img
-                      src={process.env.REACT_APP_API_ROOT + record.Image}
-                      alt={record.Title}
-                      onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = 'https://via.placeholder.com/150x150?text=No+Image';
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
+                      });
+                      if(response.status === 200) {
+                        alert('博客删除成功！');
+                        // 刷新博客列表
+                        window.location.reload();
+                      }
+                    } catch (error) {
+                      console.error('删除博客失败:', error);
+                      alert('删除博客失败，请重试。');
+                    }
+                  }
+                }}
+                onReadMore={handleReadMoreClick}
+              />
             </Col>
           ))
         ) : (
           <Col xs="12" className="text-center py-5">
             <div className="alert alert-info" role="alert">
               <i className="fas fa-info-circle me-2"></i>
-              No blog posts available yet. Check back soon!
+              暂无博客内容，请稍后再来查看！
             </div>
           </Col>
         )}
@@ -217,13 +156,14 @@ const Home = () => {
       <Row className="mt-5">
         <Col className="text-center">
           {isAuthenticated ? (
-            <Link to="/add" className="btn btn-primary">
+            <Link to="/add" className="btn btn-primary pulse">
               <i className="fas fa-plus-circle me-2"></i>
               Add New Blog Post
             </Link>
           ) : (
             <Button
               variant="primary"
+              className="pulse"
               onClick={() => {
                 setShowLoginModal(true);
               }}

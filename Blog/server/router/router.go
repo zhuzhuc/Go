@@ -25,6 +25,31 @@ func SetupRoutes(app *fiber.App) {
 	protected.Put("/:id", controller.BlogUpdate)
 	protected.Delete("/:id", controller.BlogDelete)
 
-	// 图片上传路由 - 确保路径与前端请求匹配
-	app.Post("/upload-image", middleware.AuthRequired(), controller.UploadImage)
+	// 用户资料相关路由 - 使用 /api/user 前缀避免与博客路由冲突
+	api := app.Group("/api")
+	apiProtected := api.Group("/")
+	apiProtected.Use(middleware.AuthRequired())
+
+	// 用户API - 使用修复后的控制器
+	user := apiProtected.Group("/user")
+	user.Get("/profile", controller.GetUserProfile)
+	user.Put("/profile", controller.UpdateProfile)
+	user.Put("/password", controller.UpdatePassword)
+	user.Get("/posts", controller.GetUserPosts)
+	user.Post("/avatar", controller.UploadAvatar)
+
+	// 文件上传路由
+	protected.Post("/upload-image", controller.UploadImage)
+
+	// 静态文件服务
+	app.Static("/uploads", "./uploads")
+	app.Static("/static", "./static")
+
+	// 调试和管理员功能
+	debug := app.Group("/debug")
+	debug.Post("/reset-password", controller.ResetPassword)
+	debug.Post("/user-info", controller.DebugUserInfo)
+	debug.Post("/update-avatar", controller.UpdateAvatar)
+	debug.Post("/blog-create", controller.DebugBlogCreate)
+	debug.Get("/blog-list", controller.DebugBlogList)
 }

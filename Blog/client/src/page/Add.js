@@ -248,14 +248,14 @@ const Add = () => {
                   className={`btn ${!previewMode ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setPreviewMode(false)}
                 >
-                  <i className="fas fa-edit me-1"></i> 编辑
+                  <i className="fas fa-edit me-1"></i> Edit
                 </button>
                 <button
                   type="button"
                   className={`btn ${previewMode ? 'btn-primary' : 'btn-outline-primary'}`}
                   onClick={() => setPreviewMode(true)}
                 >
-                  <i className="fas fa-eye me-1"></i> 预览
+                  <i className="fas fa-eye me-1"></i> Preview
                 </button>
               </div>
             </div>
@@ -264,7 +264,7 @@ const Add = () => {
             <div className="mb-4">
               {!previewMode ? (
                 <>
-                  <label className="form-label mb-2">博客内容 (支持 Markdown 格式)</label>
+                  <label className="form-label mb-2">Blog Detail (Support Markdown)</label>
                   <div data-color-mode="light">
                     <MDEditor
                       ref={editorRef}
@@ -296,7 +296,7 @@ const Add = () => {
                   )}
 
                   <div className="mt-3">
-                    <h5>Markdown 提示:</h5>
+                    <h5>Markdown tips:</h5>
                     <ul className="small text-muted">
                       <li>使用 # 创建标题，例如：# 标题1</li>
                       <li>使用 **文本** 创建粗体文本</li>
@@ -371,7 +371,7 @@ const Add = () => {
 
             {/* 图片上传 */}
             <div className="mb-4">
-              <label className="form-label">特色图片</label>
+              <label className="form-label">Cover</label>
               <div className="input-group mb-3">
                 <span className="input-group-text bg-light">
                   <i className="fas fa-image"></i>

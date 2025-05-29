@@ -19,7 +19,7 @@ func SetupMiddleware(app *fiber.App) {
 
 	// CORS middleware
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000", // 指定前端域名，而不是使用通配符
+		AllowOrigins:     "http://localhost:8080", // 指定前端域名，而不是使用通配符
 		AllowMethods:     "GET,POST,PUT,DELETE,OPTIONS",
 		AllowHeaders:     "Origin, Content-Type, Accept, Authorization",
 		AllowCredentials: true,

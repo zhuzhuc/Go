@@ -1,0 +1,150 @@
+/* Login Page Styles */
+
+/* Card styling */
+.login-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+/* Gradient title */
+.login-title {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Subtitle with better contrast */
+.login-subtitle {
+  color: var(--accent-color);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+/* Form labels with better visibility */
+.form-label {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Input group styling */
+.login-input-group {
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.login-input-group:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.2);
+}
+
+/* Input icon container */
+.input-icon-container {
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
+  border: none;
+  padding: 0.75rem 1rem;
+}
+
+/* Form control styling */
+.login-form-control {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: none;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+}
+
+.login-form-control::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+/* Remember me checkbox */
+.remember-me-label {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Forgot password link */
+.forgot-password {
+  color: var(--accent-color);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.forgot-password:hover {
+  color: var(--accent-color-hover);
+  text-decoration: underline;
+}
+
+/* Login button */
+.login-button {
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(var(--accent-color-rgb), 0.25);
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 10px rgba(var(--accent-color-rgb), 0.3);
+}
+
+.login-button:active {
+  transform: translateY(0);
+}
+
+/* Register link */
+.register-link {
+  color: var(--accent-color);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.register-link:hover {
+  color: var(--accent-color-hover);
+  text-decoration: underline;
+}
+
+/* Return to home link */
+.return-home {
+  color: var(--text-primary);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.return-home i {
+  color: var(--accent-color);
+  margin-right: 0.5rem;
+}
+
+.return-home:hover {
+  color: var(--accent-color);
+  transform: translateX(-5px);
+}
+
+/* No account text */
+.no-account-text {
+  color: var(--text-primary);
+  font-weight: 500;
+}

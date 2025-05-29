@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .success {
+            color: green;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+    <script>
+        function testAPI() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Testing API...</p>';
+            
+            fetch('/api/')
+                .then(response => {
+                    const statusLine = `<p>Status: <span class="${response.ok ? 'success' : 'error'}">${response.status} ${response.statusText}</span></p>`;
+                    resultDiv.innerHTML = statusLine;
+                    return response.json().catch(e => {
+                        throw new Error('Invalid JSON response: ' + e.message);
+                    });
+                })
+                .then(data => {
+                    resultDiv.innerHTML += '<p>Response Data:</p>';
+                    resultDiv.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML += `<p class="error">Error: ${error.message}</p>`;
+                });
+        }
+
+        function testDirectAPI() {
+            const resultDiv = document.getElementById('direct-result');
+            resultDiv.innerHTML = '<p>Testing direct API access...</p>';
+            
+            fetch('http://localhost:9000/')
+                .then(response => {
+                    const statusLine = `<p>Status: <span class="${response.ok ? 'success' : 'error'}">${response.status} ${response.statusText}</span></p>`;
+                    resultDiv.innerHTML = statusLine;
+                    return response.json().catch(e => {
+                        throw new Error('Invalid JSON response: ' + e.message);
+                    });
+                })
+                .then(data => {
+                    resultDiv.innerHTML += '<p>Response Data:</p>';
+                    resultDiv.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML += `<p class="error">Error: ${error.message}</p>`;
+                    resultDiv.innerHTML += '<p>Note: Direct API access might be blocked by CORS policy.</p>';
+                });
+        }
+
+        function checkEnvironment() {
+            const envDiv = document.getElementById('env-info');
+            envDiv.innerHTML = '<p>Checking environment variables...</p>';
+            
+            // 检查是否有环境变量
+            const apiRoot = window.REACT_APP_API_ROOT || '/api';
+            envDiv.innerHTML += `<p>API Root: ${apiRoot}</p>`;
+            
+            // 检查网络连接
+            envDiv.innerHTML += '<p>Checking network connectivity...</p>';
+            const startTime = new Date().getTime();
+            
+            fetch('/manifest.json')
+                .then(response => {
+                    const endTime = new Date().getTime();
+                    const latency = endTime - startTime;
+                    envDiv.innerHTML += `<p>Network latency: <span class="success">${latency}ms</span></p>`;
+                })
+                .catch(error => {
+                    envDiv.innerHTML += `<p class="error">Network error: ${error.message}</p>`;
+                });
+        }
+
+        window.onload = function() {
+            checkEnvironment();
+        };
+    </script>
+</head>
+<body>
+    <h1>API Test Page</h1>
+    
+    <div class="card">
+        <h2>Environment Information</h2>
+        <div id="env-info">Loading...</div>
+    </div>
+    
+    <div class="card">
+        <h2>Test API via Nginx Proxy</h2>
+        <p>This tests the API through the Nginx proxy at <code>/api/</code></p>
+        <button onclick="testAPI()">Test API</button>
+        <div id="result"></div>
+    </div>
+    
+    <div class="card">
+        <h2>Test Direct API Access</h2>
+        <p>This tests direct access to the API at <code>http://localhost:9000/</code></p>
+        <p><strong>Note:</strong> This might fail due to CORS policy if the API doesn't allow direct access.</p>
+        <button onclick="testDirectAPI()">Test Direct API</button>
+        <div id="direct-result"></div>
+    </div>
+</body>
+</html>

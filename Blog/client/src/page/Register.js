@@ -3,6 +3,8 @@ import { Container, Row, Col, Form, Button, Alert, Card } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import '../styles/Register.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const Register = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { login } = useAuth();
+  const { theme } = useTheme();
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -66,11 +69,11 @@ const Register = () => {
     <Container>
       <Row className="justify-content-center mt-5">
         <Col xs={12} md={8} lg={6}>
-          <Card className="shadow-sm border-0">
+          <Card className={`register-card border-0 ${theme === 'dark' ? 'dark-card' : ''}`}>
             <Card.Body className="p-5">
               <div className="text-center mb-4">
-                <h2 className="text-gradient">Create Account</h2>
-                <p className="lead text-muted">Join our blog community</p>
+                <h2 className="register-title">Create Account</h2>
+                <p className="register-subtitle">Join our blog community</p>
               </div>
 
               {error && (
@@ -82,10 +85,10 @@ const Register = () => {
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-4">
-                  <Form.Label>Username</Form.Label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                      <i className="fas fa-user text-muted"></i>
+                  <Form.Label className="form-label">Username</Form.Label>
+                  <div className="input-group register-input-group">
+                    <span className="input-group-text input-icon-container">
+                      <i className="fas fa-user"></i>
                     </span>
                     <Form.Control
                       type="text"
@@ -94,16 +97,16 @@ const Register = () => {
                       onChange={handleChange}
                       placeholder="Choose a username"
                       required
-                      className="border-0 shadow-none ps-0"
+                      className="register-form-control shadow-none"
                     />
                   </div>
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label>Email</Form.Label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                      <i className="fas fa-envelope text-muted"></i>
+                  <Form.Label className="form-label">Email</Form.Label>
+                  <div className="input-group register-input-group">
+                    <span className="input-group-text input-icon-container">
+                      <i className="fas fa-envelope"></i>
                     </span>
                     <Form.Control
                       type="email"
@@ -112,16 +115,16 @@ const Register = () => {
                       onChange={handleChange}
                       placeholder="Enter your email address"
                       required
-                      className="border-0 shadow-none ps-0"
+                      className="register-form-control shadow-none"
                     />
                   </div>
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label>Password</Form.Label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                      <i className="fas fa-lock text-muted"></i>
+                  <Form.Label className="form-label">Password</Form.Label>
+                  <div className="input-group register-input-group">
+                    <span className="input-group-text input-icon-container">
+                      <i className="fas fa-lock"></i>
                     </span>
                     <Form.Control
                       type="password"
@@ -130,16 +133,16 @@ const Register = () => {
                       onChange={handleChange}
                       placeholder="Create a strong password"
                       required
-                      className="border-0 shadow-none ps-0"
+                      className="register-form-control shadow-none"
                     />
                   </div>
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label>Confirm Password</Form.Label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                      <i className="fas fa-lock text-muted"></i>
+                  <Form.Label className="form-label">Confirm Password</Form.Label>
+                  <div className="input-group register-input-group">
+                    <span className="input-group-text input-icon-container">
+                      <i className="fas fa-lock"></i>
                     </span>
                     <Form.Control
                       type="password"
@@ -148,15 +151,14 @@ const Register = () => {
                       onChange={handleChange}
                       placeholder="Enter your password again"
                       required
-                      className="border-0 shadow-none ps-0"
+                      className="register-form-control shadow-none"
                     />
                   </div>
                 </Form.Group>
 
                 <Button
-                  variant="primary"
                   type="submit"
-                  className="w-100 py-2 mb-4"
+                  className="register-button w-100 py-2 mb-4"
                   disabled={loading}
                 >
                   {loading ? (
@@ -170,8 +172,8 @@ const Register = () => {
                 </Button>
 
                 <div className="text-center">
-                  <p className="mb-0">
-                    Already have an account? <Link to="/login" className="text-decoration-none">Login</Link>
+                  <p className="mb-0 have-account-text">
+                    Already have an account? <Link to="/login" className="login-link">Login</Link>
                   </p>
                 </div>
               </Form>
@@ -179,8 +181,8 @@ const Register = () => {
           </Card>
 
           <div className="text-center mt-4">
-            <Link to="/" className="text-decoration-none">
-              <i className="fas fa-arrow-left me-2"></i>
+            <Link to="/" className="return-home">
+              <i className="fas fa-arrow-left"></i>
               Return to Home
             </Link>
           </div>

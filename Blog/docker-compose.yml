@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  # MySQL 数据库
+  db:
+    image: mysql:8.0
+    container_name: blog-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mysql_blog
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - blog-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 应用服务 (前端 + 后端)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blog-app
+    restart: always
+    ports:
+      - "8080:80"
+      - "9000:9000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - db_user=root
+      - db_password=root
+      - db_name=mysql_blog
+      - db_host=db
+      - db_port=3306
+    volumes:
+      - uploads_data:/app/uploads
+    networks:
+      - blog-network
+
+networks:
+  blog-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  uploads_data:

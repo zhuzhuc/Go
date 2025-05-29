@@ -1,0 +1,206 @@
+/* Footer Styles */
+.footer {
+  margin-top: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Main Footer Section */
+.footer-main {
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: 2.5rem 0;
+}
+
+/* Footer Bottom Section */
+.footer-bottom {
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 0;
+}
+
+/* Footer Headings */
+.footer-heading {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.footer-heading::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background-color: var(--accent-color);
+  border-radius: 3px;
+}
+
+.dark-footer .footer-heading {
+  color: #f1f5f9;
+}
+
+/* Footer Links */
+.footer-links li a {
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  padding: 0.5rem 0;
+  display: inline-block;
+  font-weight: 500;
+}
+
+.footer-links li a i {
+  color: var(--accent-color); /* 图标使用主题色 */
+}
+
+.footer-links li a:hover {
+  color: var(--accent-color);
+  transform: translateX(5px);
+}
+
+/* Social Icons */
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--bg-primary);
+  color: var(--accent-color) !important; /* 强制使用主题色 */
+  font-size: 1.2rem;
+  margin-right: 1rem;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.social-icon:hover {
+  background-color: var(--accent-color);
+  color: white !important; /* 强制使用白色 */
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer Links Hover Effect */
+.hover-effect {
+  transition: all 0.2s ease;
+}
+
+.hover-effect:hover {
+  color: var(--accent-color) !important;
+}
+
+/* Recent Posts Styling */
+#recent-posts-placeholder ul li a {
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+#recent-posts-placeholder ul li a:hover {
+  color: var(--accent-color);
+  transform: translateX(5px);
+}
+
+#recent-posts-placeholder ul li a i {
+  margin-right: 0.5rem;
+  color: var(--accent-color);
+}
+
+/* Newsletter Form Styling */
+.newsletter-title {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.newsletter-input {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  border: 1px solid var(--border-color);
+  padding: 12px 16px;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.newsletter-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(var(--accent-color-rgb), 0.25);
+  border-color: var(--accent-color);
+}
+
+.subscribe-btn {
+  background-color: var(--accent-color);
+  color: white;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: none;
+  padding: 0 1.25rem;
+  font-weight: 500;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.subscribe-btn:hover {
+  background-color: var(--accent-color-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.privacy-text {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.privacy-text i {
+  color: var(--accent-color); /* 锁图标使用主题色 */
+}
+
+/* Copyright Section */
+.copyright-icon {
+  color: var(--accent-color); /* 使用主题色 */
+  font-size: 1rem;
+}
+
+.copyright-text {
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.footer-link {
+  color: var(--text-primary);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.footer-link i {
+  color: var(--accent-color); /* 图标使用主题色 */
+}
+
+.footer-link:hover {
+  color: var(--accent-color);
+}
+
+/* Animation */
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+  opacity: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

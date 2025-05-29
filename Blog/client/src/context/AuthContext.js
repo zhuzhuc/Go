@@ -38,6 +38,7 @@ export const AuthProvider = ({ children }) => {
 
   // 登录函数
   const login = (userData, authToken) => {
+    console.log('登录/更新用户信息:', userData);
     localStorage.setItem('token', authToken);
     localStorage.setItem('user', JSON.stringify(userData));
     setUser(userData);

@@ -102,38 +102,39 @@ const Blog = () => {
         <Container>
             <Row className="justify-content-center">
                 <Col xs="12" md="10" lg="8">
-                    <div className="blog-detail">
-                        <h1>{apiData.Title}</h1>
-                        <div className="blog-meta mb-4">
-                            <small className="text-muted me-3">
-                                <i className="far fa-calendar-alt me-2"></i>
-                                {new Date().toLocaleDateString()}
-                            </small>
-                            <small className="text-muted">
-                                <i className="fas fa-user me-2"></i>
-                                {apiData.Author || "Anonymous"}
-                            </small>
-                        </div>
-
+                    <div className="blog-detail fade-in">
                         {/* 显示特色图片 */}
                         {apiData.Image && (
-                            <div className="featured-image mb-4">
+                            <div className="featured-image mb-5 zoom-in">
                                 <img
                                     src={process.env.REACT_APP_API_ROOT + apiData.Image}
                                     alt={apiData.Title}
-                                    className="img-fluid rounded shadow-sm"
-                                    style={{ maxHeight: '400px', width: 'auto', display: 'block', margin: '0 auto' }}
+                                    className="img-fluid rounded"
+                                    style={{ width: '100%', height: '400px', objectFit: 'cover' }}
                                     onError={(e) => {
                                         console.log("Image load error:", e);
                                         e.target.onerror = null;
-                                        e.target.src = 'https://via.placeholder.com/400x300?text=Image+Not+Found';
+                                        e.target.src = 'https://via.placeholder.com/1200x400?text=Image+Not+Found';
                                     }}
                                 />
                             </div>
                         )}
 
+                        <h1 className="slide-in-left">{apiData.Title}</h1>
+
+                        <div className="meta slide-in-left" style={{ animationDelay: '0.1s' }}>
+                            <div>
+                                <i className="far fa-calendar-alt"></i>
+                                {new Date().toLocaleDateString()}
+                            </div>
+                            <div>
+                                <i className="fas fa-user"></i>
+                                {apiData.Author || "Anonymous"}
+                            </div>
+                        </div>
+
                         {/* 使用 Markdown 渲染博客内容 */}
-                        <div className="blog-content">
+                        <div className="blog-content slide-in-left" style={{ animationDelay: '0.2s' }}>
                             <ReactMarkdown
                                 remarkPlugins={[remarkGfm]}
                                 components={{
@@ -176,14 +177,14 @@ const Blog = () => {
                             </ReactMarkdown>
                         </div>
 
-                        <div className="mt-4 pt-3 border-top d-flex justify-content-between">
+                        <div className="mt-5 pt-4 border-top d-flex justify-content-between align-items-center slide-in-left" style={{ animationDelay: '0.3s' }}>
                             <Link to="/" className="btn btn-outline-primary">
                                 <i className="fas fa-arrow-left me-2"></i>
                                 Back to Blog List
                             </Link>
                             {isAuthor() && (
-                                <div>
-                                    <Link to={`/edit/${apiData.id}`} className="btn btn-outline-secondary me-2">
+                                <div className="d-flex">
+                                    <Link to={`/edit/${apiData.id}`} className="btn btn-outline-secondary me-3">
                                         <i className="fas fa-edit me-1"></i>
                                         Edit
                                     </Link>

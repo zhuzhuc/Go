@@ -3,6 +3,8 @@ import { Container, Row, Col, Form, Button, Alert, Card } from 'react-bootstrap'
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import '../styles/Login.css';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,6 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const { theme } = useTheme();
 
   // 检查是否有重定向信息
   useEffect(() => {
@@ -88,11 +91,11 @@ const Login = () => {
     <Container>
       <Row className="justify-content-center mt-5">
         <Col xs={12} md={8} lg={6}>
-          <Card className="shadow-sm border-0">
+          <Card className={`login-card border-0 ${theme === 'dark' ? 'dark-card' : ''}`}>
             <Card.Body className="p-5">
               <div className="text-center mb-4">
-                <h2 className="text-gradient">Welcome Back</h2>
-                <p className="lead text-muted">Login to your account</p>
+                <h2 className="login-title">Welcome Back</h2>
+                <p className="login-subtitle">Login to your account</p>
               </div>
 
               {error && (
@@ -111,10 +114,10 @@ const Login = () => {
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-4">
-                  <Form.Label>Username</Form.Label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                      <i className="fas fa-user text-muted"></i>
+                  <Form.Label className="form-label">Username</Form.Label>
+                  <div className="input-group login-input-group">
+                    <span className="input-group-text input-icon-container">
+                      <i className="fas fa-user"></i>
                     </span>
                     <Form.Control
                       type="text"
@@ -123,16 +126,16 @@ const Login = () => {
                       onChange={handleChange}
                       placeholder="Enter your username"
                       required
-                      className="border-0 shadow-none ps-0"
+                      className="login-form-control shadow-none"
                     />
                   </div>
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label>Password</Form.Label>
-                  <div className="input-group">
-                    <span className="input-group-text bg-light border-0">
-                      <i className="fas fa-lock text-muted"></i>
+                  <Form.Label className="form-label">Password</Form.Label>
+                  <div className="input-group login-input-group">
+                    <span className="input-group-text input-icon-container">
+                      <i className="fas fa-lock"></i>
                     </span>
                     <Form.Control
                       type="password"
@@ -141,7 +144,7 @@ const Login = () => {
                       onChange={handleChange}
                       placeholder="Enter your password"
                       required
-                      className="border-0 shadow-none ps-0"
+                      className="login-form-control shadow-none"
                     />
                   </div>
                 </Form.Group>
@@ -149,18 +152,17 @@ const Login = () => {
                 <Form.Group className="mb-4 d-flex justify-content-between align-items-center">
                   <Form.Check
                     type="checkbox"
-                    label="Remember me"
+                    label={<span className="remember-me-label">Remember me</span>}
                     id="remember-me"
                   />
-                  <Link to="/forgot-password" className="text-decoration-none text-primary">
+                  <Link to="/forgot-password" className="forgot-password">
                     Forget your password?
                   </Link>
                 </Form.Group>
 
                 <Button
-                  variant="primary"
                   type="submit"
-                  className="w-100 py-2 mb-4"
+                  className="login-button w-100 py-2 mb-4"
                   disabled={loading}
                 >
                   {loading ? (
@@ -174,8 +176,8 @@ const Login = () => {
                 </Button>
 
                 <div className="text-center">
-                  <p className="mb-0">
-                    No Account? <Link to="/register" className="text-decoration-none">Register</Link>
+                  <p className="mb-0 no-account-text">
+                    No Account? <Link to="/register" className="register-link">Register</Link>
                   </p>
                 </div>
               </Form>
@@ -183,8 +185,8 @@ const Login = () => {
           </Card>
 
           <div className="text-center mt-4">
-            <Link to="/" className="text-decoration-none">
-              <i className="fas fa-arrow-left me-2"></i>
+            <Link to="/" className="return-home">
+              <i className="fas fa-arrow-left"></i>
               Return to Home
             </Link>
           </div>

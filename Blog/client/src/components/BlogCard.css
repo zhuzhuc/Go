@@ -1,0 +1,338 @@
+/* 博客卡片基本样式 */
+.blog-card {
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  min-height: 400px; /* 确保卡片有最小高度 */
+}
+
+/* 深色背景下的博客卡片样式 */
+body.dark-mode .blog-card,
+.dark-theme .blog-card {
+  background-color: #2a2d3a;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.blog-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08), 0 6px 6px rgba(0, 0, 0, 0.12);
+}
+
+/* 博客卡片图片容器 */
+.blog-card-image-container {
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+  background-color: #f8f9fa;
+}
+
+/* 没有图片的容器特殊样式 */
+.blog-card-image-container.no-image {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e4e8eb 50%, #f5f7fa 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 深色模式下没有图片的容器样式 */
+body.dark-mode .blog-card-image-container.no-image,
+.dark-theme .blog-card-image-container.no-image {
+  background: linear-gradient(135deg, #1e2130 0%, #2a2d3a 50%, #1e2130 100%);
+}
+
+/* 添加装饰性元素 */
+.blog-card-image-container.no-image::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background: radial-gradient(circle, rgba(248, 7, 89, 0.05) 0%, rgba(248, 7, 89, 0) 70%);
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(0.8); opacity: 0.5; }
+}
+
+/* 博客卡片图片 */
+.blog-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.blog-card:hover .blog-card-image {
+  transform: scale(1.05);
+}
+
+/* 占位图样式 */
+.blog-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.blog-card:hover .blog-card-placeholder {
+  transform: scale(1.05);
+}
+
+.placeholder-icon {
+  font-size: 4rem;
+  color: #f80759;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.blog-card:hover .placeholder-icon {
+  transform: scale(1.1);
+  color: #850c62;
+}
+
+/* 深色模式下的占位图标 */
+body.dark-mode .placeholder-icon,
+.dark-theme .placeholder-icon {
+  color: #f80759;
+  opacity: 0.9;
+  text-shadow: 0 0 15px rgba(248, 7, 89, 0.3);
+}
+
+body.dark-mode .blog-card:hover .placeholder-icon,
+.dark-theme .blog-card:hover .placeholder-icon {
+  color: #ff3b7e;
+  text-shadow: 0 0 20px rgba(248, 7, 89, 0.5);
+}
+
+/* 博客卡片内容区域 */
+.blog-card-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* 博客卡片标题 */
+.blog-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.blog-card-title a {
+  color: #333;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.blog-card-title a:hover {
+  color: #f80759;
+}
+
+/* 深色模式下的标题颜色 */
+body.dark-mode .blog-card-title a,
+.dark-theme .blog-card-title a {
+  color: #e1e1e6;
+}
+
+body.dark-mode .blog-card-title a:hover,
+.dark-theme .blog-card-title a:hover {
+  color: #f80759;
+}
+
+/* 博客卡片摘要 */
+.blog-card-excerpt {
+  flex-grow: 1;
+  margin-bottom: 1rem;
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* 限制为3行 */
+  -webkit-box-orient: vertical;
+  position: relative;
+  max-height: 4.8em; /* 3行的高度 = 行高 * 3 */
+  word-break: break-word;
+}
+
+/* 深色模式下的摘要文本颜色 */
+body.dark-mode .blog-card-excerpt,
+.dark-theme .blog-card-excerpt {
+  color: #b0b0b8;
+}
+
+/* 添加渐变遮罩效果 */
+.blog-card-excerpt::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+  pointer-events: none;
+}
+
+/* 深色模式下的渐变遮罩效果 */
+body.dark-mode .blog-card-excerpt::after,
+.dark-theme .blog-card-excerpt::after {
+  background: linear-gradient(to bottom, rgba(42, 45, 58, 0), rgba(42, 45, 58, 1));
+}
+
+/* 代码占位符样式 */
+.code-placeholder {
+  display: inline-block;
+  background-color: #f1f1f1;
+  color: #666;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  font-family: monospace;
+  margin: 0 0.2rem;
+}
+
+/* 深色模式下的代码占位符样式 */
+body.dark-mode .code-placeholder,
+.dark-theme .code-placeholder {
+  background-color: #3a3d4a;
+  color: #b0b0b8;
+}
+
+/* 作者信息和元数据 */
+.blog-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* 深色模式下的元数据颜色 */
+body.dark-mode .blog-card-meta,
+.dark-theme .blog-card-meta {
+  color: #9a9aa8;
+}
+
+.blog-card-author {
+  display: flex;
+  align-items: center;
+}
+
+.author-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.blog-card-date {
+  display: flex;
+  align-items: center;
+}
+
+.blog-card-date i {
+  margin-right: 0.25rem;
+  color: #f80759;
+}
+
+/* 博客卡片底部 */
+.blog-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 深色模式下的底部边框 */
+body.dark-mode .blog-card-footer,
+.dark-theme .blog-card-footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.blog-card-meta-tags {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.read-time {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #f8f9fa;
+  color: #666;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* 深色模式下的阅读时间标签 */
+body.dark-mode .read-time,
+.dark-theme .read-time {
+  background-color: #3a3d4a;
+  color: #b0b0b8;
+}
+
+.blog-card-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* 阅读更多按钮 */
+.read-more-btn {
+  background: linear-gradient(90deg, #850c62, #f80759);
+  border: none;
+  color: white;
+  font-size: 0.85rem;
+  padding: 0.375rem 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.read-more-btn:hover {
+  background: linear-gradient(90deg, #f80759, #850c62);
+  transform: translateX(3px);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .blog-card-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .blog-card-footer {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .blog-card-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
